@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: service-credentials
+type: Opaque
+data:
+  apiKey: "YWJjZA=="
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-center
+data:
+  user_service: "ws-user-service"

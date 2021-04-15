@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ws-user-service
+  labels:
+    app: ws-user-service
+    kind: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ws-user-service
+  template:
+    metadata:
+      labels:
+        app: ws-user-service
+    spec:
+      containers:
+        - name: ws-user-service
+          image: hataketed/ws-user-service:1.0.2
+          ports:
+            - containerPort: 8080
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: service-credentials
+                  key: apiKey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ws-user-service
+  labels:
+    spring-boot: "true"
+    kind: service
+spec:
+  type: NodePort
+  selector:
+    app: ws-user-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
